@@ -127,17 +127,22 @@ export async function setupStatus(signedIn: boolean): Promise<SetupStatus> {
     status: "todo",
     note: undefined,
     action: "connect",
-    steps: [
+    steps: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? [
+      ["Use the local connection string below. The development database password is postgres, as configured in supabase/config.toml."],
+      ["Broke applies its numbered SQL migrations. Supabase CLI schema migrations are disabled so only one migration runner manages the schema."],
+    ] : [
       ["In Supabase, press ", { href: dash("?showConnect=true"), label: "Connect" }, " at the top of your project."],
       ["Under Method, choose Session pooler. Copy the connection string."],
       ["Paste it below with your database password, then press Save. broke puts the password in for you and creates all its tables at once."],
     ],
-    fields: fields(env, ["SUPABASE_DB_URL", "SUPABASE_DB_PASSWORD"], {
+    fields: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? fields(env, ["SUPABASE_DB_URL"], {
+      SUPABASE_DB_URL: { placeholder: "postgresql://postgres:postgres@127.0.0.1:54322/postgres?sslmode=disable" },
+    }) : fields(env, ["SUPABASE_DB_URL", "SUPABASE_DB_PASSWORD"], {
       SUPABASE_DB_URL: { placeholder: "postgresql://postgres.xxxx:[YOUR-PASSWORD]@…pooler.supabase.com:5432/postgres" },
       SUPABASE_DB_PASSWORD: { help: "The one you chose when you made the project. Forgot it? Reset it under Project Settings, Database." },
-    }),
+    }),,
   };
-  if (!sb?.ok) database = { ...database, note: "Finish the account database first.", action: undefined };
+  if (!sb?.ok) database = { ...database, note: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? "Start local Supabase and save its API keys first." : "Finish the account database first.", action: undefined };
   else if (isSet(env.SUPABASE_DB_URL) || mcpConnected(ref)) {
     if (isSet(env.SUPABASE_DB_URL)) process.env.SUPABASE_DB_URL = env.SUPABASE_DB_URL; // a value just saved, before Next's env reload lands
     const r = await migrate({ apply: false });
