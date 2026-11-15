@@ -117,7 +117,7 @@ export async function setupStatus(signedIn: boolean): Promise<SetupStatus> {
       NEXT_PUBLIC_SUPABASE_URL: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? { label: "Local API URL", placeholder: "http://127.0.0.1:54321" } : { placeholder: "https://supabase.com/dashboard/project/…", help: "The address in your browser's address bar on the API Keys page." },
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? { label: "Local anon key", placeholder: "Copy from supabase status" } : { placeholder: "sb_publishable_…", help: "Under Publishable key. Starts with sb_publishable_." },
       SUPABASE_SERVICE_ROLE_KEY: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? { label: "Local service_role key", placeholder: "Copy from supabase status" } : { placeholder: "sb_secret_…", help: "Under Secret keys: press the eye to show it, then copy. Starts with sb_secret_." },
-    }),,
+    }),
   };
 
   let database: Section = {
