@@ -33,6 +33,7 @@ export const COUNTRIES: Country[] = [
   { code: "NL", name: "Netherlands", currency: "EUR", locale: "nl-NL", providers: ["enablebanking", "plaid", "csv"], tax: "none", cards: false },
   { code: "SE", name: "Sweden", currency: "SEK", locale: "sv-SE", providers: ["enablebanking", "plaid", "csv"], tax: "none", cards: false },
   { code: "SG", name: "Singapore", currency: "SGD", locale: "en-SG", providers: ["csv"], tax: "none", cards: false },
+  { code: "MY", name: "Malaysia", currency: "MYR", locale: "en-MY", providers: ["csv"], tax: "none", cards: false, regionLabel: "State" },
   { code: "ZA", name: "South Africa", currency: "ZAR", locale: "en-ZA", providers: ["csv"], tax: "none", cards: false },
   { code: "BR", name: "Brazil", currency: "BRL", locale: "pt-BR", providers: ["belvo", "csv"], tax: "none", cards: false },
   { code: "MX", name: "Mexico", currency: "MXN", locale: "es-MX", providers: ["csv"], tax: "none", cards: false },
@@ -49,7 +50,7 @@ export const countryOf = (code?: string | null): Country => COUNTRIES.find((c) =
 // Time zones that name a listed country. First-run picker.
 const TZ: Record<string, string> = {
   "Pacific/Auckland": "NZ", "Europe/London": "GB", "Europe/Dublin": "IE", "Asia/Kolkata": "IN", "Asia/Calcutta": "IN", "Europe/Berlin": "DE",
-  "Europe/Paris": "FR", "Europe/Madrid": "ES", "Europe/Rome": "IT", "Europe/Amsterdam": "NL", "Europe/Stockholm": "SE", "Asia/Singapore": "SG",
+  "Europe/Paris": "FR", "Europe/Madrid": "ES", "Europe/Rome": "IT", "Europe/Amsterdam": "NL", "Europe/Stockholm": "SE", "Asia/Singapore": "SG", "Asia/Kuala_Lumpur": "MY",
   "Africa/Johannesburg": "ZA", "America/Sao_Paulo": "BR", "America/Mexico_City": "MX", "Asia/Tokyo": "JP", "Asia/Manila": "PH", "Asia/Dubai": "AE",
   "America/Toronto": "CA", "America/Vancouver": "CA", "America/Edmonton": "CA", "America/Winnipeg": "CA", "America/Halifax": "CA",
   // The US zones in the IANA database (zone1970.tab), plus Honolulu. "US/Eastern"-style aliases are handled in guessCountry.
