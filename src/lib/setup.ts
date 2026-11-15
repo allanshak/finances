@@ -140,7 +140,7 @@ export async function setupStatus(signedIn: boolean): Promise<SetupStatus> {
     }) : fields(env, ["SUPABASE_DB_URL", "SUPABASE_DB_PASSWORD"], {
       SUPABASE_DB_URL: { placeholder: "postgresql://postgres.xxxx:[YOUR-PASSWORD]@…pooler.supabase.com:5432/postgres" },
       SUPABASE_DB_PASSWORD: { help: "The one you chose when you made the project. Forgot it? Reset it under Project Settings, Database." },
-    }),,
+    }),
   };
   if (!sb?.ok) database = { ...database, note: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? "Start local Supabase and save its API keys first." : "Finish the account database first.", action: undefined };
   else if (isSet(env.SUPABASE_DB_URL) || mcpConnected(ref)) {
