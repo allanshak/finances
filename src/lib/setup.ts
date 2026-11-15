@@ -104,16 +104,20 @@ export async function setupStatus(signedIn: boolean): Promise<SetupStatus> {
     what: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? "Your database and sign-in run on this Mac. No hosted Supabase project is needed." : "About 2 minutes. Your sign-in and money data live here, in an account only you control.",
     status: sb?.ok ? "done" : sb ? "error" : "todo",
     note: sb?.ok ? (ref ? `Project ${ref}` : sb.message) : sb?.message,
-    steps: [
+    steps: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? [
+      ["In Terminal, from the finances folder, run supabase start."],
+      ["Run supabase status and copy the API URL, anon key and service_role key into the fields below."],
+      ["The local database and credentials stay on this Mac. Save the values when entered."],
+    ] : [
       ["Make a free account and a new project at ", { href: "https://supabase.com/dashboard/new", label: "supabase.com" }, ". Any name works. Write down the database password you choose: you need it in the next step."],
       ["When the project is ready, open ", { href: dash("/settings/api-keys"), label: "Project Settings → API Keys" }, "."],
       ["Copy three things from that page into the boxes below, then press Save."],
     ],
     fields: fields(env, ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "SUPABASE_SERVICE_ROLE_KEY"], {
-      NEXT_PUBLIC_SUPABASE_URL: { placeholder: "https://supabase.com/dashboard/project/…", help: "The address in your browser's address bar on the API Keys page." },
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: { placeholder: "sb_publishable_…", help: "Under Publishable key. Starts with sb_publishable_." },
-      SUPABASE_SERVICE_ROLE_KEY: { placeholder: "sb_secret_…", help: "Under Secret keys: press the eye to show it, then copy. Starts with sb_secret_." },
-    }),
+      NEXT_PUBLIC_SUPABASE_URL: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? { label: "Local API URL", placeholder: "http://127.0.0.1:54321" } : { placeholder: "https://supabase.com/dashboard/project/…", help: "The address in your browser's address bar on the API Keys page." },
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? { label: "Local anon key", placeholder: "Copy from supabase status" } : { placeholder: "sb_publishable_…", help: "Under Publishable key. Starts with sb_publishable_." },
+      SUPABASE_SERVICE_ROLE_KEY: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? { label: "Local service_role key", placeholder: "Copy from supabase status" } : { placeholder: "sb_secret_…", help: "Under Secret keys: press the eye to show it, then copy. Starts with sb_secret_." },
+    }),,
   };
 
   let database: Section = {
