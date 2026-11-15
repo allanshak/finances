@@ -5,6 +5,11 @@ import { countryOf, guessCountry, wantsAkahu } from "./countries.ts";
 assert.equal(guessCountry(["en-NZ", "en"]), "NZ");
 assert.equal(guessCountry(["de"], "Europe/Berlin"), "DE");
 assert.equal(guessCountry(["en"], "Australia/Sydney"), "AU");
+assert.equal(guessCountry(["en-US"], "Asia/Kuala_Lumpur"), "MY");
+assert.equal(guessCountry(["en-MY"]), "MY");
+assert.equal(countryOf("MY").currency, "MYR");
+assert.equal(countryOf("MY").locale, "en-MY");
+assert.deepEqual(countryOf("MY").providers, ["csv"]);
 assert.equal(guessCountry(["en-US"], "Pacific/Auckland"), "NZ"); // the time zone wins
 assert.equal(guessCountry(["en-GB", "en-US"], "America/Chicago"), "US"); // a US time zone beats en-GB first
 assert.equal(guessCountry(["en-GB"], "America/New_York"), "US");
