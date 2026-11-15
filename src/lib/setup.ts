@@ -34,6 +34,8 @@ export type SetupStatus = { sections: Section[]; ready: boolean; canWrite: boole
 const PICK = Object.keys(ENV_KEYS);
 export const currentEnv = () => ({ ...Object.fromEntries(PICK.map((k) => [k, process.env[k]])), ...readEnv() }) as Record<string, string | undefined>;
 export const isSet = (v?: string) => !isPlaceholder(v);
+export const isLocalSupabase = (value?: string) => { try { const host = new URL(value ?? "").hostname; return host === "localhost" || host === "127.0.0.1" || host === "::1"; } catch { return false; } };
+
 export const supabaseReady = (env: Record<string, string | undefined> = process.env) =>
   isSet(env.NEXT_PUBLIC_SUPABASE_URL) && isSet(env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) && isSet(env.SUPABASE_SERVICE_ROLE_KEY);
 
@@ -98,8 +100,8 @@ export async function setupStatus(signedIn: boolean): Promise<SetupStatus> {
 
   const supabase: Section = {
     id: "supabase", kind: "required",
-    title: "Create your free database",
-    what: "About 2 minutes. Your sign-in and money data live here, in an account only you control.",
+    title: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? "Connect local Supabase" : "Create your free database",
+    what: isLocalSupabase(env.NEXT_PUBLIC_SUPABASE_URL) ? "Your database and sign-in run on this Mac. No hosted Supabase project is needed." : "About 2 minutes. Your sign-in and money data live here, in an account only you control.",
     status: sb?.ok ? "done" : sb ? "error" : "todo",
     note: sb?.ok ? (ref ? `Project ${ref}` : sb.message) : sb?.message,
     steps: [
