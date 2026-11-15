@@ -34,6 +34,10 @@ import { dateLabel, fmtFor, fmtWith, money, money0, monthLabel, parseAmount, sig
 assert.equal(money(1234.5), "$1,234.50");
 assert.equal(money0(-0.2), "$0");
 assert.equal(signed(-12), "+$12.00");
+const my = fmtWith(fmtFor({ country: "MY" }));
+assert.equal(my.currency, "MYR");
+assert.equal(my.locale, "en-MY");
+assert.match(my.money(1234.5), /RM/);
 const nz = fmtWith(fmtFor({ country: "NZ" }));
 assert.equal(nz.money(1234.5), "$1,234.50");
 assert.equal(nz.currency, "NZD");
